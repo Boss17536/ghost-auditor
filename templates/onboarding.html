@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Ghost Auditor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container" style="max-width: 600px; padding-top: 80px;">
+        <div class="card">
+            <h2 style="margin-bottom: 24px;">Welcome, {{ user.name.split()[0] if user.name else "Administrator" }}</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 32px;">Let's get your first workspace connected to Ghost Auditor.</p>
+
+            <form action="{{ url_for('onboarding') }}" method="POST">
+                <div class="form-group">
+                    <label class="form-label">Step 1: Your TinyFish API Key</label>
+                    <input type="password" name="tinyfish_key" class="form-control" placeholder="tf_live_..." required>
+                    <span class="form-text">Don't have one? Get a free key at <a href="https://tinyfish.ai" target="_blank" rel="noopener">tinyfish.ai</a></span>
+                </div>
+
+                <div style="height: 1px; background: var(--border); margin: 32px 0;"></div>
+
+                <div class="form-group">
+                    <label class="form-label">Step 2: Workspace Details</label>
+                    
+                    <label class="form-label" style="font-size: 0.8rem; margin-top: 16px;">SaaS Platform</label>
+                    <select name="tool" class="form-control" style="appearance: auto; margin-bottom: 16px;">
+                        <option value="slack">Slack</option>
+                        <option value="github">GitHub</option>
+                        <option value="notion">Notion</option>
+                    </select>
+
+                    <label class="form-label" style="font-size: 0.8rem;">Workspace Admin URL</label>
+                    <input type="url" name="workspace_url" class="form-control" placeholder="https://app.slack.com/client/T0..." required style="margin-bottom: 16px;">
+
+                    <label class="form-label" style="font-size: 0.8rem;">Monthly Seat Cost (USD)</label>
+                    <input type="number" step="0.01" name="seat_cost" class="form-control" value="7.00" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large" style="width: 100%; margin-top: 16px;">Run My First Audit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

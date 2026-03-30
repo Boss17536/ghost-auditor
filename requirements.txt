@@ -1,0 +1,8 @@
+flask
+flask-dance
+flask-sqlalchemy
+python-dotenv
+tinyfish
+requests
+cryptography
+gunicorn

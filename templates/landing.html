@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Auditor | Stop Paying for Unused SaaS Seats</title>
+    <meta name="description" content="Find unused SaaS seats and automatically calculate wasted spend with AI.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2Z"/>
+                    <path d="M12 16v-4"/>
+                    <path d="M12 8h.01"/>
+                </svg>
+                Ghost<span>Auditor</span>
+            </div>
+            <div class="user-nav">
+                <a href="{{ url_for('google.login') }}" class="btn btn-outline" id="btn-login-nav">Sign in</a>
+            </div>
+        </nav>
+
+        <main class="hero">
+            <h1>Stop Paying for Ghost Accounts</h1>
+            <p>Ghost Auditor finds unused SaaS seats and calculates exactly how much you're wasting — in under 10 seconds.</p>
+            <a href="{{ url_for('google.login') }}" class="btn btn-primary btn-large" id="btn-login-hero">Sign in with Google — It's Free</a>
+            <div class="social-proof">Built on TinyFish Web Agent API</div>
+        </main>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>One Click Audit</h3>
+                <p>No manual work. Ghost Auditor logs in, navigates to your admin panel, and finds inactivity instantly.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Any SaaS Tool</h3>
+                <p>Seamlessly audit Slack, GitHub, Notion, or any SaaS application with user licensing.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Instant CSV Export</h3>
+                <p>Easily share audit reports with your team or import directly to your procurement pipelines.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

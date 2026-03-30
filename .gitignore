@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+*.db
+slack_cookies.json
+venv/
+.venv/
+.firebase/
+members.json
