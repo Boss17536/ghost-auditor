@@ -36,9 +36,9 @@ google_bp = make_google_blueprint(
     client_id=os.getenv("GOOGLE_CLIENT_ID", "mock-client-id"),
     client_secret=os.getenv("GOOGLE_CLIENT_SECRET", "mock-client-secret"),
     scope=["profile", "email"],
-    redirect_to="authorized",
-    authorization_url_params={"prompt": "select_account"}
+    redirect_to="authorized"
 )
+google_bp.authorization_url_params = {"prompt": "select_account"}
 app.register_blueprint(google_bp, url_prefix="/google")
 
 # Encryption setup for API keys
