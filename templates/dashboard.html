@@ -34,7 +34,7 @@
             <div>
                 <h2>Audit Dashboard</h2>
                 <p style="color: var(--text-secondary); margin-top: 4px; font-size: 0.9rem;">
-                    Target: <strong>{{ user.workspace_url | split("//") | last if user.workspace_url else 'None' }}</strong>
+                    Target: <strong>{{ user.workspace_url.split('//') | last if user.workspace_url else 'None' }}</strong>
                 </p>
             </div>
             <div class="dash-actions">

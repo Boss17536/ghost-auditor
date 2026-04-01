@@ -30,11 +30,14 @@ db = SQLAlchemy(app)
 
 # OAuth setup
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # Required for local debug
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1' # Prevents Google scope change from causing 500 errors
+
 google_bp = make_google_blueprint(
     client_id=os.getenv("GOOGLE_CLIENT_ID", "mock-client-id"),
     client_secret=os.getenv("GOOGLE_CLIENT_SECRET", "mock-client-secret"),
     scope=["profile", "email"],
-    redirect_to="authorized"
+    redirect_to="authorized",
+    authorization_url_params={"prompt": "select_account"}
 )
 app.register_blueprint(google_bp, url_prefix="/google")
 
@@ -330,5 +333,34 @@ def export_csv():
         headers={"Content-Disposition": "attachment; filename=ghost_auditor_report.csv"},
     )
     
+@app.route('/mock-admin')
+def mock_admin():
+    return '''
+<!DOCTYPE html>
+<html>
+<head><title>Curator Project - Admin</title></head>
+<body>
+<h1>Curator Project - Members (5)</h1>
+<table id="members-table" border="1" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Full Name</th>
+      <th>Email</th>
+      <th>Last Active</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>hodafil654</td><td>hodafil@mailinator.com</td><td>2025-07-15</td><td>Member</td></tr>
+    <tr><td>nyxara111</td><td>nyxara@mailinator.com</td><td>2026-03-25</td><td>Admin</td></tr>
+    <tr><td>siyowi8463</td><td>siyowi@mailinator.com</td><td>2025-06-02</td><td>Member</td></tr>
+    <tr><td>sopehet706</td><td>sopehet@mailinator.com</td><td>2025-05-10</td><td>Member</td></tr>
+    <tr><td>curator.official09</td><td>curator@gmail.com</td><td>2026-03-27</td><td>Owner</td></tr>
+  </tbody>
+</table>
+</body>
+</html>
+'''
+
 if __name__ == "__main__":
     app.run(debug=True, port=int(os.getenv("PORT", 5000)))
