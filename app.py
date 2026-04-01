@@ -57,6 +57,7 @@ class User(db.Model):
     workspace_url = db.Column(db.String(255))
     tool = db.Column(db.String(50), default="slack")
     seat_cost = db.Column(db.Float, default=7.00)
+    slack_cookie = db.Column(db.Text)
     last_audit_json = db.Column(db.Text)
     last_audit_date = db.Column(db.String(100))
     created_at = db.Column(db.String(100))
@@ -100,6 +101,7 @@ def _run_audit_thread(user_email: str, app_context) -> None:
             workspace = user.workspace_url
             tool = user.tool
             seat_cost = user.seat_cost
+            slack_cookie_raw = fernet.decrypt(user.slack_cookie.encode()).decode() if user.slack_cookie else ""
 
             from agent.slack_agent import audit_slack
             class LiveLogger:
@@ -108,7 +110,7 @@ def _run_audit_thread(user_email: str, app_context) -> None:
                 def flush(self): pass
 
             with redirect_stdout(LiveLogger()):
-                result = audit_slack(tf_key, workspace, tool, seat_cost)
+                result = audit_slack(tf_key, workspace, tool, seat_cost, slack_cookie_raw)
             
             if result and result.get("status") == "SUCCESS" and result.get("members"):
                 user.last_audit_json = json.dumps(result["members"])
@@ -182,8 +184,13 @@ def onboarding():
         except ValueError:
             seat_cost = 7.00
             
+        raw_cookie = request.form.get("slack_cookie")
+            
         if tf_key:
             user.tinyfish_key = fernet.encrypt(tf_key.encode()).decode()
+        if raw_cookie:
+            user.slack_cookie = fernet.encrypt(raw_cookie.encode()).decode()
+            
         user.workspace_url = workspace
         user.tool = tool
         user.seat_cost = seat_cost
@@ -232,6 +239,10 @@ def user_settings():
         if tf_key and not tf_key.startswith("****"):
             user.tinyfish_key = fernet.encrypt(tf_key.encode()).decode()
             
+        raw_cookie = request.form.get("slack_cookie")
+        if raw_cookie and not raw_cookie.startswith("****"):
+            user.slack_cookie = fernet.encrypt(raw_cookie.encode()).decode()
+            
         user.workspace_url = request.form.get("workspace_url")
         user.tool = request.form.get("tool", "slack")
         try:
@@ -249,7 +260,11 @@ def user_settings():
         except Exception:
             masked_key = "****"
             
-    return render_template("settings.html", user=user, masked_key=masked_key)
+    masked_cookie = ""
+    if user.slack_cookie:
+        masked_cookie = "****"
+            
+    return render_template("settings.html", user=user, masked_key=masked_key, masked_cookie=masked_cookie)
 
 @app.route("/audit", methods=["POST"])
 def run_audit():

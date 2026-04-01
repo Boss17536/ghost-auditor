@@ -37,6 +37,17 @@
                     <label class="form-label" style="font-size: 0.8rem;">Monthly Seat Cost (USD)</label>
                     <input type="number" step="0.01" name="seat_cost" class="form-control" value="7.00" required>
                 </div>
+                
+                <div style="height: 1px; background: var(--border); margin: 32px 0;"></div>
+
+                <div class="form-group">
+                    <label class="form-label">Step 3: Secure Session Injection (Crucial for Real SaaS Apps!)</label>
+                    <span class="form-text" style="display: block; margin-bottom: 12px; color: var(--text-secondary);">
+                        To bypass Slack's 2FA security wall, drag this snippet to your bookmarks bar and click it on your Slack page, or run it in your DevTools console, then paste the output below:<br><br>
+                        <code style="background: rgba(124, 58, 237, 0.2); color: #c4b5fd; padding: 4px; border-radius: 4px; font-size: 0.75rem; user-select: all; display: inline-block; margin-bottom: 8px;">javascript:prompt("Copy your Secure Session Cookies:", document.cookie)</code>
+                    </span>
+                    <textarea name="slack_cookie" class="form-control" placeholder="Drop your massive raw cookie sequence here... Ghost Auditor will extract specifically the tiny login token automatically." style="min-height: 80px; resize: vertical;"></textarea>
+                </div>
 
                 <button type="submit" class="btn btn-primary btn-large" style="width: 100%; margin-top: 16px;">Run My First Audit</button>
             </form>

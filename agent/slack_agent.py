@@ -2,14 +2,32 @@ import json
 from datetime import datetime
 from agent.tinyfish_client import AuditingClient
 
-def audit_slack(tf_key: str, workspace_url: str, tool: str, seat_cost: float) -> dict:
+def audit_slack(tf_key: str, workspace_url: str, tool: str, seat_cost: float, slack_cookie: str = "") -> dict:
     if not tf_key:
         print("[!] No TinyFish API Key provided. Cannot run audit.")
         return {"status": "ERROR", "members": []}
         
     client = AuditingClient(api_key=tf_key)
     
+    # Process secure session extraction
+    d_val = ""
+    if slack_cookie:
+        for part in slack_cookie.split(';'):
+            part = part.strip()
+            if part.startswith('d='):
+                d_val = part[2:]
+                break
+                
+    injection_prompt = ""
+    if d_val:
+        print(f"[*] Secure Session Cookie detected. Injecting bypass protocol into agent prompt.")
+        injection_prompt = (
+            f"CRITICAL: First, execute the javascript EXACTLY as follows: `document.cookie='d={d_val}; domain=.slack.com; path=/';`. "
+            "Then, wait 1 second and forcefully refresh the current page to authenticate the browser. "
+        )
+    
     goal = (
+        f"{injection_prompt}"
         "Navigate to the members/admin page of this workspace. "
         "Find the table showing all members. "
         "Extract every row with these fields: name, email, last_active, role. "
