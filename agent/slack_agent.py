@@ -12,11 +12,20 @@ def audit_slack(tf_key: str, workspace_url: str, tool: str, seat_cost: float, sl
     # Process secure session extraction
     d_val = ""
     if slack_cookie:
-        for part in slack_cookie.split(';'):
-            part = part.strip()
-            if part.startswith('d='):
-                d_val = part[2:]
-                break
+        slack_cookie = slack_cookie.strip()
+        try:
+            cookies = json.loads(slack_cookie)
+            if isinstance(cookies, list):
+                for cookie in cookies:
+                    if cookie.get('name') == 'd':
+                        d_val = cookie.get('value')
+                        break
+        except json.JSONDecodeError:
+            for part in slack_cookie.split(';'):
+                part = part.strip()
+                if part.startswith('d='):
+                    d_val = part[2:]
+                    break
                 
     injection_prompt = ""
     if d_val:
