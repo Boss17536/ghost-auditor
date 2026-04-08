@@ -1,9 +1,21 @@
+# Environment
 .env
+
+# Python
 __pycache__/
 *.pyc
-*.db
-slack_cookies.json
 venv/
 .venv/
-.firebase/
+
+# Databases
+*.db
+instance/
+
+# Local data & tokens
+slack_cookies.json
 members.json
+.firebase/
+
+# OS Files
+.DS_Store
+Thumbs.db
